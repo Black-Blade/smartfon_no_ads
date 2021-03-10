@@ -23,20 +23,27 @@ class DNS_DROP:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of DNS_DROP
-# @date         06.03.2021
-# @param        
+# @date         10.03.2021
+# @param        [piholeenabel(True,False), piholegrvotydb(True,False),listenabel,listfile,buffertimeout(int)]  
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self):
+    def __init__(self,dorpserver=None):
             logging.debug ("")
-            
-            self._pihole_enabel=Config.DROPPYHOLEENABLE
-            self._db = Config.DROPPYHOLEGRAVITYDB
-            self._list_enabel=Config.DROPLISTENABLE
-            self._list =Config.DROPLISTFILE
-            self._droptimerdnsbuffer =Config.DROPTIMEDNSBUFFER.to_bytes(4, byteorder="big")
+            if dorpserver is None:
+                self._pihole_enabel=Config.DROPPYHOLEENABLE
+                self._db = Config.DROPPYHOLEGRAVITYDB
+                self._list_enabel=Config.DROPLISTENABLE
+                self._list =Config.DROPLISTFILE
+                self._droptimerdnsbuffer =Config.DROPTIMEDNSBUFFER.to_bytes(4, byteorder="big")
+            else:
+                piholeenabel, piholegrvotydb,listenabel,listfile,buffertimeout = dorpserver
+                self._pihole_enabel=piholeenabel
+                self._db = piholegrvotydb
+                self._list_enabel=listenabel
+                self._list =listfile
+                self._droptimerdnsbuffer =buffertimeout.to_bytes(4, byteorder="big")
 
 #/*******************************************************************************
 # @author       Black-Blade
