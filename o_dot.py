@@ -13,6 +13,7 @@
 import socket
 from socket import AF_INET, SOCK_STREAM, SO_REUSEADDR, SOL_SOCKET, SHUT_RDWR
 import ssl
+import threading
 
 # IMPORT MY STANDRT CLASS
 from log import logging
@@ -42,39 +43,64 @@ class OUTPUT_DOT:
             
         self._port=853
         self._buffersize =1024
-       
+        
         if server=="cloudflare":
-            self._ip="1dot1dot1dot1.cloudflare-dns.com"
+            #self._ip="1dot1dot1dot1.cloudflare-dns.com"
+            self._ip="1.1.1.1"
 
-        if server=="cleanbrowsing-family":
-            self._ip="family-filter-dns.cleanbrowsing.org"
+        if server=="cleanbrowsing-family-1":
+            #self._ip="family-filter-dns.cleanbrowsing.org"
+            self.ip="185.228.168.168"
 
-        if server=="cleanbrowsing-adult":
-            self._ip="adult-filter-dns.cleanbrowsing.org"
+        if server=="cleanbrowsing-family-2":
+            #self._ip="family-filter-dns.cleanbrowsing.org"
+            self.ip="185.228.169.168"
 
-        if server=="security-adult":
-            self._ip="security-filter-dns.cleanbrowsing.org"
-
+        if server=="cleanbrowsing-adult-1":
+            #self._ip="adult-filter-dns.cleanbrowsing.org"
+            self._ip="185.228.168.10"
+        if server=="cleanbrowsing-adult-2":
+            #self._ip="adult-filter-dns.cleanbrowsing.org"
+            self._ip="185.228.169.10"
+        
+        if server=="security-adult-1":
+            #self._ip="security-filter-dns.cleanbrowsing.org"
+            self._ip="185.228.168.9"
+        if server=="security-adult-2":
+            #self._ip="security-filter-dns.cleanbrowsing.org"
+            self._ip="185.228.169.9"
+        
         if server=="ffmuc":
-            self._ip="dot.ffmuc.net"
+            #self._ip="dot.ffmuc.net"
+            self._ip="5.1.66.255"
 
-        if server=="googel":
-            self._ip="dns.google"
+        if server=="googel-1":
+            #self._ip="dns.google"
+            self._ip="8.8.8.8"
+
+        if server=="googel-1":
+            #self._ip="dns.google"
+            self._ip="8.8.4.4"
 
         if server=="digitale-gesellschaft":
-            self._ip="dns.digitale-gesellschaft.ch"
+            #self._ip="dns.digitale-gesellschaft.ch"
+            self._ip="185.95.218.42"
 
         if server=="quad9":
-            self._ip="dns.quad9.net"
+            #self._ip="dns.quad9.net"
+            self.ip="9.9.9.9"
 
-        if server=="dismail1":
-            self._ip="fdns1.dismail.de"
+        if server=="dismail-1":
+            #self._ip="fdns1.dismail.de"
+            self._ip="80.241.218.68"
 
-        if server=="dismail2":
+        if server=="dismail-2":
             self._ip="fdns2.dismail.de"
-
+            self._ip="159.69.114.157"
+            
         if server=="digitalcourage":
-            self._ip="dns3.digitalcourage.de"
+            #self._ip="dns3.digitalcourage.de"
+            self._ip="46.182.19.48"
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Deconstructor of OUTPUT_DOT
@@ -101,7 +127,6 @@ class OUTPUT_DOT:
         logging.debug ("")
         
         rxdata =None
-      
         try:
 
             #Add 2 byte for len for tcp protokll
