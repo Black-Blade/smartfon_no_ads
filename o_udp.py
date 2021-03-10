@@ -22,16 +22,20 @@ class OUTPUT_UDP:
 # @author       Black-Blade
 # @brief        Constructor of OUTPUT_UDP
 # @date         06.03.2021
-# @param        
+# @param        [udpserver(String(),port(int)]        
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self):
+    def __init__(self,udpserver=None):
         logging.debug ("")
-
-        self._ip=Config.O_UDPSERVER
-        self._port=Config.O_UDPPORT
+        if udpserver is None:
+            self._ip=Config.O_UDPSERVER
+            self._port=Config.O_UDPPORT
+        else:
+            ip,port =udpserver
+            self._ip=ip
+            self._port=port
         self._buffersize =1024
 
 #/*******************************************************************************

@@ -26,15 +26,18 @@ class OUTPUT_DOH:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of OUTPUT_DOH
-# @date         06.03.2021
-# @param        
+# @date         10.03.2021
+# @param        [dohserver(String()]
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self):
+    def __init__(self,dohserver=None):
         logging.debug ("")
-        server = Config.O_DOHSERVER
+        if dohserver is None:
+            server = Config.O_DOHSERVER
+        else:
+            server = dohserver
 
         if server=="cloudflare-dns-post":
             self._url       ="https://cloudflare-dns.com/dns-query"

@@ -24,22 +24,28 @@ class Input_TCP:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of Input_TCP
-# @date         08.03.2021
-# @param        [switch(pointer),geoip(pointer)]
+# @date         10.03.2021
+# @param        switch(pointer),geoip(pointer),[TCPSERVER(String),TCPPORT(INT),TIMEOUT(FLOAT)]
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self,switch,geoip):
+    def __init__(self,switch,geoip,tcpserver=None):
         logging.debug ("")
 
         self._switch =switch
         self._geoip=geoip
 
-        self._listen_addr = Config.I_TCPSERVER
-        self._listen_port = Config.I_TCPPORT
-        self._timeout = Config.I_TCPTIMEOUT
-        
+        if tcpserver is None:
+            self._listen_addr = Config.I_TCPSERVER
+            self._listen_port = Config.I_TCPPORT
+            self._timeout = Config.I_TCPTIMEOUT
+        else:
+            server,port,timeout =tcpserver
+            self._listen_addr = server
+            self._listen_port = port
+            self._timeout = timeout
+
         self._maxlisten =100
         self._buffersize =1024
        
@@ -99,8 +105,8 @@ class Input_TCP:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Read the DNS rquest of extern
-# @date         08.03.2021
-# @param        
+# @date         10.03.2021
+# @param        conn,addr
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          https://tools.ietf.org/html/rfc1035   
@@ -111,7 +117,12 @@ class Input_TCP:
             conn.settimeout(self._timeout)   
             host, port = addr
 
-            ok,text =  self._geoip(host)
+            if  self._geoip is None:
+                ok= True
+                text= "NO GEOIP"
+            else:
+                ok,text =  self._geoip(host)
+            
             if ok == True:
            
                 self._conterrequests=self._conterrequests+1

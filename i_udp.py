@@ -25,20 +25,25 @@ class Input_UDP:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of Input_UDP
-# @date         06.03.2021
-# @param        [switch(pointer),geoip(pointer)]
+# @date         10.03.2021
+# @param        switch(pointer),geoip(pointer),[UDPSERVER(String),UDPPORT(INT)]
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self,switch,geoip):
+    def __init__(self,switch,geoip,udpserver=None):
         logging.debug ("")
 
         self._switch =switch
         self._geoip=geoip
+        if udpserver is None:
+            self._listen_addr = Config.I_DOTSERVER
+            self._listen_port = Config.I_UDPPORT
+        else:
+            server,port =udpserver
+            self._listen_addr = server
+            self._listen_port = port
 
-        self._listen_addr = Config.I_DOTSERVER
-        self._listen_port = Config.I_UDPPORT
         self._buffersize =1024
 
         self._conterrequests=0
@@ -94,8 +99,8 @@ class Input_UDP:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Read the DNS rquest of extern
-# @date         06.03.2021
-# @param        
+# @date         10.03.2021
+# @param        conn,addr    
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          https://tools.ietf.org/html/rfc1035
@@ -105,8 +110,12 @@ class Input_UDP:
             logging.debug ("")
             host, port = conn
         
-            ok,text =  self._geoip(host)
-            print(ok)
+            if  self._geoip is None:
+                ok= True
+                text= "NO GEOIP"
+            else:
+                ok,text =  self._geoip(host)
+            
             if ok == True:
                 self._conterrequests=self._conterrequests+1
                 self._conterrequest=self._conterrequest+1

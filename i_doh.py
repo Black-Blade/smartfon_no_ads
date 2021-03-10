@@ -78,7 +78,13 @@ class Webserver(BaseHTTPRequestHandler):
         global g_conterrequest
         global g_countererror
         host, port = self.client_address
-        ok,text= g_dot_geoip(host)
+        
+        if  g_dot_geoip is None:
+            ok= True
+            text= "NO GEOIP"
+        else:
+            ok,text =  g_dot_geoip(host)
+
         if ok==True:
            if self.path==g_dot_path:
                 accept = self.headers['Accept'] 
@@ -118,14 +124,14 @@ class Input_DOH:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of Input_DOT
-# @date         06.03.2021
-# @param        [switch(pointer),geoip(pointer)]
+# @date         10.03.2021
+# @param        switch(pointer),geoip(pointer),[DOHPATH(String),DOHSERVER(String),DOHPORT(INT),CERTFILE,CERTPKEY]
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
  
-    def __init__(self,switch,geoip):
+    def __init__(self,switch,geoip,dohserver = None):
         logging.debug ("")
 
         global g_dot_geoip
@@ -134,13 +140,24 @@ class Input_DOH:
 
         g_dot_geoip = geoip
         g_dot_switch = switch
-        g_dot_path =Config.I_DOHPATH
+
+        if dohserver is None:
+            g_dot_path =Config.I_DOHPATH
     
-        self._listen_addr = Config.I_DOHSERVER
-        self._listen_port = Config.I_DOHPORT
-        
-        self._server_cert = Config.CERTFILE
-        self._server_key = Config.CERTPKEY
+            self._listen_addr = Config.I_DOHSERVER
+            self._listen_port = Config.I_DOHPORT
+            
+            self._server_cert = Config.CERTFILE
+            self._server_key = Config.CERTPKEY
+        else:
+            path,server,port,cfile,ckey =dohserver
+            g_dot_path =path
+    
+            self._listen_addr = server
+            self._listen_port = port
+            
+            self._server_cert = cfile
+            self._server_key = ckey
 
 #/*******************************************************************************
 # @author       Black-Blade

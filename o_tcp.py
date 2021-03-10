@@ -22,17 +22,23 @@ class OUTPUT_TCP:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of OUTPUT_TCP
-# @date         06.03.2021
-# @param        
+# @date         10.03.2021
+# @param        [tcpserver(String(),port(int),timeout(fload)]
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self):
+    def __init__(self,tcpserver=None):
         logging.debug ("")
-        self._ip=Config.O_TCPSERVER
-        self._port=Config.O_TCPPORT
-        self._settimeout =Config.O_TCPTIMEOUT
+        if tcpserver is None:
+            self._ip=Config.O_TCPSERVER
+            self._port=Config.O_TCPPORT
+            self._settimeout =Config.O_TCPTIMEOUT
+        else:
+            ip,port,timeout = tcpserver
+            self._ip=ip
+            self._port=port
+            self._settimeout =timeout     
         self._buffersize =1024
        
 #/*******************************************************************************

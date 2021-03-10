@@ -25,17 +25,22 @@ class OUTPUT_DOT:
 #/*******************************************************************************
 # @author       Black-Blade
 # @brief        Constructor of OUTPUT_DOT
-# @date         06.03.2021
-# @param        
+# @date         10.03.2021
+# @param        [dohserver(String(),timeout(fload)]      
 # @return       
 # @version      0.0.1 Doxygen style eingebaut und erstellen dieser File
 # @see          
 # *******************************************************************************/
-    def __init__(self):
+    def __init__(self,dotserver=None):
         logging.debug ("")
-        server= Config.O_DOTSERVER
+        if dotserver is None:
+            server= Config.O_DOTSERVER
+            self._settimeout =Config.O_DOTTIMEOUT
+        else:
+            server,timeout = dotserver
+            self._settimeout= timeout
+            
         self._port=853
-        self._settimeout =Config.O_DOTTIMEOUT
         self._buffersize =1024
        
         if server=="cloudflare":
